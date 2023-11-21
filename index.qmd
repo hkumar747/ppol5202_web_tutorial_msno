@@ -1,7 +1,6 @@
 ---
-title: "ppol5202_web_tutorial_msno"
+title: "PPOL 5202 (Data Visualization)"
+author: Kumar H
 ---
 
-This is a Quarto website.
-
-To learn more about Quarto websites visit <https://quarto.org/docs/websites>.
+This is a Quarto website for PPOL 5202 - Data Visualization, Fall 2023. Currently, it contains a webpage for the submission for the tutorial assignment for Kumar H (hk939). 

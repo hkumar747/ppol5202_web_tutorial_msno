@@ -1,36 +1,16 @@
 ---
-title: What's Missingno?
+title: Analyzing missing values in Python using `missingno`
 jupyter: g_env
+author: Kumar H 
+date: "21 Nov 2023"
+format:  
+  html:
+    fig-width: 2
+    fig-height: 2
+    execute:
+        code_fold: true
+        warning: false
 ---
-
-```{python}
-# title: "Homework 1, DSAN 6600"
-# date: 'Sept. 22, 2023'
-# author:
-#   - name: Kumar H 
-#     corresponding: false
-#     email: hk939@georgetown.edu
-# format:  
-#   html:
-#      mathjax: true
-# project:
-#   type: website
-#   output-dir: docs
-```
-
-```{python}
-import pandas as pd
-import numpy as np
-import missingno as msno
-import os
-```
-
-```{python}
-
-os.chdir(r'D:\Work\Georgetown\acad\sem3\viz\ppol5202_web_tutorial_msno')
-# Load your dataset
-df = pd.read_csv('dc_tax_data.csv')
-```
 
 
 **Missingno** is our Sherlock Holmes in the world of Python data analysis. It’s a library specifically designed to tackle one of the most common yet frustrating parts of data analysis – missing values. You know, those pesky NaNs that lurk in your datasets, often skewing your analyses or, worse, leading to erroneous conclusions.
@@ -44,9 +24,44 @@ df = pd.read_csv('dc_tax_data.csv')
 
 First, ensure you have missingno installed. If not, a quick pip install does the trick:
 
-```{python}
+```{python .hide-output, .warning=FALSE, .message=FALSE}
+#| output: false
 !pip install missingno
 ```
+
+### Load the libraries and the data
+
+We will use a dataset of residential building characteristics collected and made public by the Washington DC government, called the [Computer Assisted Mass Appraisal (CAMA) database](https://opendata.dc.gov/datasets/DCGIS::computer-assisted-mass-appraisal-residential/about). We also import the [missingno package](https://github.com/ResidentMario/missingno) that we installed above.
+
+```{python .include=false}
+#| output: false
+#| echo: false
+import os
+#change directory
+os.chdir(r'D:\Work\Georgetown\acad\sem3\viz\ppol5202_web_tutorial_msno')
+
+#cd D:\Work\Georgetown\acad\sem3\viz\quarto_websites\ppol5202_web_tutorial_msno
+
+
+```
+
+```{python .cache=TRUE}
+import pandas as pd
+import numpy as np
+import missingno as msno
+
+#####################
+
+# Load your dataset
+df = pd.read_csv('dc_tax_data.csv')
+df=df[['SSL', 'BATHRM','HEAT_D', 'AC', 'NUM_UNITS',
+       'ROOMS', 'BEDRM', 'AYB', 'YR_RMDL', 'STORIES', 'SALEDATE',
+       'PRICE', 'QUALIFIED', 'SALE_NUM', 'GBA', 'BLDG_NUM', 'STYLE_D', 'STRUCT_D', 'GRADE_D',
+         'CNDTN_D', 'EXTWALL_D', 'ROOF_D', 'INTWALL_D', 'KITCHENS',
+       'FIREPLACES']]
+```
+
+
 
 ## Visualizing missing values
 
@@ -56,10 +71,12 @@ First, ensure you have missingno installed. If not, a quick pip install does the
 ### 1. Matrix
 
 
-The following code helps us visualize the missing values in a matrix
+The following code helps us visualize the missing values in a matrix. Note that you can set the figure size and fontsize parameters as you wish:
 
 ```{python}
-msno.matrix(df)
+#| fig-cap: "<strong>Matrix of missing values</strong>"
+
+msno.matrix(df, figsize=(10,5), fontsize=10)
 ```
 
 This plot shows us the pattern of missingness across columns. White lines indicate missing values. A quick glance can tell you if there’s a pattern or if the missingness is random. As we see above, the `YR_RMDL` (year in which building was remodeled) column has the most missing values, followed by the `PRICE` column. 
@@ -71,53 +88,70 @@ This plot shows us the pattern of missingness across columns. White lines indica
 
 The Bar chart is a quick-check tool to see how many non-missing values we have per column.
 
-```{python}
-msno.bar(df)
+```{python .fig.cap="Bar"}
+#| fig-cap: "<strong>Barplot of missing non-missing values</strong>"
+msno.bar(df, figsize=(9, 4), fontsize=10)
 ```
 
 ### 3. Heatmap
 
 The `missingno` heatmap is a tool for exploring the relationship between missing values in different variables within a dataset. This heatmap focuses on nullity correlation, which essentially tells us how the presence or absence of one variable impacts another. The algorithm behind this heatmap filters out variables that don't significantly contribute to the analysis. This means variables that are consistently non-null or always null are excluded because they don’t provide useful correlation information.
 
-
 Entries marked <1 or >-1 hint at near-perfect negative or positive relationships with a few exceptions. These exceptions are important as they might indicate irregularities or errors in the data. 
 
-The heatmap is a great tool for visualizing and understanding pairwise relationships in terms of data completeness, its utility starts to taper off when dealing with more complex relationships or extremely large datasets. I
+```{python .cache=TRUE}
+#| fig-cap: "<strong>Heatmap - Missing value correlations</strong>"
 
-```{python}
-msno.heatmap(df)
+df2=df.iloc[:, 2:28]
+msno.heatmap(df2, figsize=(9, 5), fontsize=10)
 ```
 
 ### 4. Dendrogram
 
-The `dendrogram` in `missingno` offers a more comprehensive view of variable completion correlations, going beyond the pairwise analysis seen in the correlation heatmap. It employs a hierarchical clustering algorithm from the SciPy library to assess variables against each other based on their nullity correlation. This is done by evaluating binary distance, where the algorithm iteratively groups variables in a way that minimizes the distance within these clusters. A key aspect of this process is that variables with similar patterns of missingness are clustered together.
-
-
-When you look at a dendrogram, you're essentially reading a story of variable correlation from the top down. Points where cluster leaves join at zero indicate a perfect prediction of one variable's presence by another’s. This could mean scenarios where one variable is always empty when another is filled, or they might consistently mirror each other’s state (both being empty or filled).
+The `dendrogram` in `missingno` offers a more comprehensive view of variable completion correlations, going beyond the pairwise analysis seen in the correlation heatmap. It employs a hierarchical clustering algorithm from the SciPy library to assess variables against each other based on their nullity correlation. This is done by evaluating binary distance, where the algorithm iteratively groups variables in a way that minimizes the distance within these clusters. A key aspect of this process is that variables with similar patterns of missingness are clustered together. When you look at a dendrogram, you're essentially reading a story of variable correlation from the top down. Points where cluster leaves join at zero indicate a perfect prediction of one variable's presence by another’s. This could mean scenarios where one variable is always empty when another is filled, or they might consistently mirror each other’s state (both being empty or filled).
 
 For instance, in a specific dataset, the dendrogram might cluster together variables that are mandatory and therefore always present. Leaves that are close but not exactly at zero suggest a strong, albeit not perfect, correlation. Such nuances are crucial for data analysts, as they highlight potential mismatches or anomalies in the dataset. If, according to your understanding of the data, certain columns should match in their presence or absence, the dendrogram can quantify the extent of mismatches. This insight could inform decisions on how many values need to be adjusted to align with expected patterns.
 
-```{python}
+```{python .cache=TRUE}
+#| fig-cap: "<strong>Dendrogram of missing values</strong>"
+
 # Dendrogram
-msno.dendrogram(df)
+msno.dendrogram(df2, figsize=(9, 5))
 ```
 
 The diagram suggests that "PLACES", "BEDRM", "ROOMS", and "STORIES" have very similar patterns of missingness, hence they are clustered closely together. "AYB" and "YR_RMDL" merge at a higher point than "PLACES", "BEDRM", "ROOMS", and "STORIES", suggesting that "AYB" and "YR_RMDL" are less similarly missing compared to the other cluster.
 
 Where clusters join together at the very bottom, it could suggest that the presence or absence of one variable is a good predictor for the presence or absence of the other within the same cluster.
 
+### Limitations:
+
+The simplicity of this package is a double-edged sword. There is limited flexibility and customization. Moreover, the official documentation notes that datasets with more than 50 variables are difficult to visualize. Moreover, if you have a large number of variables, visual checks of missingness patterns are probably insufficient, and you should use statistical techniques to check patterns.
+
+
 ## Conclusion
 
 In machine learning applications, missing values might seem like an irritation to be disposed of quickly. Our ultimate goal is to reach a missingno matrix like this:
 
 ```{python}
-df2 = df.dropna()
-msno.matrix(df2)
+#| fig-cap: "<strong>Matrix - no null values</strong>"
+
+df2 = df2.dropna()
+msno.matrix(df2, figsize=(8, 4), fontsize=10)
 ```
 
 **But exercise caution and patience!**
 
-Dropping or imputing missing values willy-nilly without examining the co-occurrence pattern among variables may introduce subtle, damaging biases into the dataset. However, the lean and efficient `missingno` library will hopefully let you diagnose the missing patterns in seconds!
+Dropping or imputing missing values willy-nilly without examining the co-occurrence pattern among variables may introduce subtle, damaging biases into the dataset. However, the lean and efficient `missingno` library will hopefully let you diagnose the missing patterns in seconds. 
+
 
 Happy coding!
+
+
+---
+
+### References:
+
+https://github.com/ResidentMario/missingno
+
+https://opendata.dc.gov/datasets/DCGIS::computer-assisted-mass-appraisal-residential/about
 

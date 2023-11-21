@@ -19,13 +19,13 @@ mkdir posts
 quarto create-project . --type website
 
 
-
+(powershell)
 - quarto convert notebook.ipynb
 - quarto render
 
+move .qmd to posts
 
-move .qmd to posts, add .qmd in the about.qmd
-
+in quarto_yml, add in the about.qmd
 
 quarto preview
 

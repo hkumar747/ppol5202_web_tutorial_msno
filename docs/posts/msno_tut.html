@@ -6,8 +6,10 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="author" content="Kumar H">
+<meta name="dcterms.date" content="2023-11-21">
 
-<title>ppol5202_web_tutorial_msno - What’s Missingno?</title>
+<title>ppol5202_web_tutorial_msno - Analyzing missing values in Python using missingno</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -120,12 +122,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  <span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../about.html" rel="" target="">
- <span class="menu-text">About</span></a>
-  </li>  
-  <li class="nav-item">
     <a class="nav-link active" href="../posts/msno_tut.html" rel="" target="" aria-current="page">
- <span class="menu-text">What’s Missingno?</span></a>
+ <span class="menu-text">Analyzing missing values in Python using <code>missingno</code></span></a>
   </li>  
 </ul>
             <div class="quarto-navbar-tools ms-auto">
@@ -144,14 +142,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
    
   <ul>
   <li><a href="#getting-started" id="toc-getting-started" class="nav-link active" data-scroll-target="#getting-started">Getting started</a></li>
+  <li><a href="#load-the-libraries-and-the-data" id="toc-load-the-libraries-and-the-data" class="nav-link" data-scroll-target="#load-the-libraries-and-the-data">Load the libraries and the data</a></li>
   <li><a href="#visualizing-missing-values" id="toc-visualizing-missing-values" class="nav-link" data-scroll-target="#visualizing-missing-values">Visualizing missing values</a>
   <ul class="collapse">
   <li><a href="#matrix" id="toc-matrix" class="nav-link" data-scroll-target="#matrix">1. Matrix</a></li>
   <li><a href="#barplot." id="toc-barplot." class="nav-link" data-scroll-target="#barplot.">2. Barplot.</a></li>
   <li><a href="#heatmap" id="toc-heatmap" class="nav-link" data-scroll-target="#heatmap">3. Heatmap</a></li>
   <li><a href="#dendrogram" id="toc-dendrogram" class="nav-link" data-scroll-target="#dendrogram">4. Dendrogram</a></li>
+  <li><a href="#limitations" id="toc-limitations" class="nav-link" data-scroll-target="#limitations">Limitations:</a></li>
   </ul></li>
-  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion">Conclusion</a></li>
+  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion">Conclusion</a>
+  <ul class="collapse">
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References:</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -160,14 +163,26 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">What’s Missingno?</h1>
+<h1 class="title">Analyzing missing values in Python using <code>missingno</code></h1>
 </div>
 
 
 
 <div class="quarto-title-meta">
 
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Kumar H </p>
+          </div>
+  </div>
     
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">November 21, 2023</p>
+    </div>
+  </div>
   
     
   </div>
@@ -175,31 +190,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 </header>
 
-<div class="cell" data-execution_count="1">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># title: "Homework 1, DSAN 6600"</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co"># date: 'Sept. 22, 2023'</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co"># author:</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co">#   - name: Kumar H </span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co">#     corresponding: false</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co">#     email: hk939@georgetown.edu</span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co"># format:  </span></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="co">#   html:</span></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="co">#      mathjax: true</span></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="co"># project:</span></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="co">#   type: website</span></span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="co">#   output-dir: docs</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div class="cell" data-execution_count="2">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> missingno <span class="im">as</span> msno</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div class="cell" data-execution_count="3">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>os.chdir(<span class="vs">r'D:\Work\Georgetown\acad\sem3\viz\ppol5202_web_tutorial_msno'</span>)</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Load your dataset</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(<span class="st">'dc_tax_data.csv'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
 <p><strong>Missingno</strong> is our Sherlock Holmes in the world of Python data analysis. It’s a library specifically designed to tackle one of the most common yet frustrating parts of data analysis – missing values. You know, those pesky NaNs that lurk in your datasets, often skewing your analyses or, worse, leading to erroneous conclusions.</p>
 <ul>
 <li><strong>Simplicity</strong>: It’s user-friendly and integrates seamlessly with Pandas, making it a breeze to use right out of the box.</li>
@@ -209,88 +199,27 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="getting-started" class="level3">
 <h3 class="anchored" data-anchor-id="getting-started">Getting started</h3>
 <p>First, ensure you have missingno installed. If not, a quick pip install does the trick:</p>
-<div class="cell" data-execution_count="4">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>pip install missingno</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Requirement already satisfied: missingno in c:\programdata\anaconda3\envs\g_env\lib\site-packages (0.5.1)
-Requirement already satisfied: matplotlib in c:\programdata\anaconda3\envs\g_env\lib\site-packages (from missingno) (3.5.1)
-Requirement already satisfied: numpy in c:\users\hk\appdata\roaming\python\python310\site-packages (from missingno) (1.24.1)
-Requirement already satisfied: seaborn in c:\programdata\anaconda3\envs\g_env\lib\site-packages (from missingno) (0.11.2)
-Requirement already satisfied: scipy in c:\programdata\anaconda3\envs\g_env\lib\site-packages (from missingno) (1.8.0)
-Requirement already satisfied: python-dateutil&gt;=2.7 in c:\programdata\anaconda3\envs\g_env\lib\site-packages (from matplotlib-&gt;missingno) (2.8.2)
-Requirement already satisfied: pyparsing&gt;=2.2.1 in c:\programdata\anaconda3\envs\g_env\lib\site-packages (from matplotlib-&gt;missingno) (3.0.7)
-Requirement already satisfied: packaging&gt;=20.0 in c:\programdata\anaconda3\envs\g_env\lib\site-packages (from matplotlib-&gt;missingno) (21.3)
-Requirement already satisfied: cycler&gt;=0.10 in c:\programdata\anaconda3\envs\g_env\lib\site-packages (from matplotlib-&gt;missingno) (0.11.0)
-Requirement already satisfied: pillow&gt;=6.2.0 in c:\users\hk\appdata\roaming\python\python310\site-packages (from matplotlib-&gt;missingno) (9.5.0)
-Requirement already satisfied: fonttools&gt;=4.22.0 in c:\programdata\anaconda3\envs\g_env\lib\site-packages (from matplotlib-&gt;missingno) (4.29.1)
-Requirement already satisfied: kiwisolver&gt;=1.0.1 in c:\programdata\anaconda3\envs\g_env\lib\site-packages (from matplotlib-&gt;missingno) (1.3.2)
-Requirement already satisfied: pandas&gt;=0.23 in c:\programdata\anaconda3\envs\g_env\lib\site-packages (from seaborn-&gt;missingno) (2.1.3)
-Requirement already satisfied: pytz&gt;=2020.1 in c:\programdata\anaconda3\envs\g_env\lib\site-packages (from pandas&gt;=0.23-&gt;seaborn-&gt;missingno) (2021.3)
-Requirement already satisfied: tzdata&gt;=2022.1 in c:\programdata\anaconda3\envs\g_env\lib\site-packages (from pandas&gt;=0.23-&gt;seaborn-&gt;missingno) (2022.1)
-Requirement already satisfied: six&gt;=1.5 in c:\programdata\anaconda3\envs\g_env\lib\site-packages (from python-dateutil&gt;=2.7-&gt;matplotlib-&gt;missingno) (1.16.0)</code></pre>
+<div class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>pip install missingno</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell-output cell-output-stderr">
-<pre><code>WARNING: Ignoring invalid distribution -yarrow (c:\programdata\anaconda3\envs\g_env\lib\site-packages)
-WARNING: Ignoring invalid distribution -umpy (c:\programdata\anaconda3\envs\g_env\lib\site-packages)
-WARNING: Ignoring invalid distribution -rotobuf (c:\programdata\anaconda3\envs\g_env\lib\site-packages)
-WARNING: Ignoring invalid distribution -qdm (c:\programdata\anaconda3\envs\g_env\lib\site-packages)
-WARNING: Ignoring invalid distribution -orch (c:\programdata\anaconda3\envs\g_env\lib\site-packages)
-WARNING: Ignoring invalid distribution -oblib (c:\programdata\anaconda3\envs\g_env\lib\site-packages)
-WARNING: Ignoring invalid distribution -hapely (c:\programdata\anaconda3\envs\g_env\lib\site-packages)
-WARNING: Ignoring invalid distribution -equests (c:\programdata\anaconda3\envs\g_env\lib\site-packages)
-WARNING: Ignoring invalid distribution -enacity (c:\programdata\anaconda3\envs\g_env\lib\site-packages)
-WARNING: Ignoring invalid distribution -andas (c:\programdata\anaconda3\envs\g_env\lib\site-packages)
-WARNING: Ignoring invalid distribution -yarrow (c:\programdata\anaconda3\envs\g_env\lib\site-packages)
-WARNING: Ignoring invalid distribution -umpy (c:\programdata\anaconda3\envs\g_env\lib\site-packages)
-WARNING: Ignoring invalid distribution -rotobuf (c:\programdata\anaconda3\envs\g_env\lib\site-packages)
-WARNING: Ignoring invalid distribution -qdm (c:\programdata\anaconda3\envs\g_env\lib\site-packages)
-WARNING: Ignoring invalid distribution -orch (c:\programdata\anaconda3\envs\g_env\lib\site-packages)
-WARNING: Ignoring invalid distribution -oblib (c:\programdata\anaconda3\envs\g_env\lib\site-packages)
-WARNING: Ignoring invalid distribution -hapely (c:\programdata\anaconda3\envs\g_env\lib\site-packages)
-WARNING: Ignoring invalid distribution -equests (c:\programdata\anaconda3\envs\g_env\lib\site-packages)
-WARNING: Ignoring invalid distribution -enacity (c:\programdata\anaconda3\envs\g_env\lib\site-packages)
-WARNING: Ignoring invalid distribution -andas (c:\programdata\anaconda3\envs\g_env\lib\site-packages)
-WARNING: Ignoring invalid distribution -yarrow (c:\programdata\anaconda3\envs\g_env\lib\site-packages)
-WARNING: Ignoring invalid distribution -umpy (c:\programdata\anaconda3\envs\g_env\lib\site-packages)
-WARNING: Ignoring invalid distribution -rotobuf (c:\programdata\anaconda3\envs\g_env\lib\site-packages)
-WARNING: Ignoring invalid distribution -qdm (c:\programdata\anaconda3\envs\g_env\lib\site-packages)
-WARNING: Ignoring invalid distribution -orch (c:\programdata\anaconda3\envs\g_env\lib\site-packages)
-WARNING: Ignoring invalid distribution -oblib (c:\programdata\anaconda3\envs\g_env\lib\site-packages)
-WARNING: Ignoring invalid distribution -hapely (c:\programdata\anaconda3\envs\g_env\lib\site-packages)
-WARNING: Ignoring invalid distribution -equests (c:\programdata\anaconda3\envs\g_env\lib\site-packages)
-WARNING: Ignoring invalid distribution -enacity (c:\programdata\anaconda3\envs\g_env\lib\site-packages)
-WARNING: Ignoring invalid distribution -andas (c:\programdata\anaconda3\envs\g_env\lib\site-packages)
-WARNING: Ignoring invalid distribution -yarrow (c:\programdata\anaconda3\envs\g_env\lib\site-packages)
-WARNING: Ignoring invalid distribution -umpy (c:\programdata\anaconda3\envs\g_env\lib\site-packages)
-WARNING: Ignoring invalid distribution -rotobuf (c:\programdata\anaconda3\envs\g_env\lib\site-packages)
-WARNING: Ignoring invalid distribution -qdm (c:\programdata\anaconda3\envs\g_env\lib\site-packages)
-WARNING: Ignoring invalid distribution -orch (c:\programdata\anaconda3\envs\g_env\lib\site-packages)
-WARNING: Ignoring invalid distribution -oblib (c:\programdata\anaconda3\envs\g_env\lib\site-packages)
-WARNING: Ignoring invalid distribution -hapely (c:\programdata\anaconda3\envs\g_env\lib\site-packages)
-WARNING: Ignoring invalid distribution -equests (c:\programdata\anaconda3\envs\g_env\lib\site-packages)
-WARNING: Ignoring invalid distribution -enacity (c:\programdata\anaconda3\envs\g_env\lib\site-packages)
-WARNING: Ignoring invalid distribution -andas (c:\programdata\anaconda3\envs\g_env\lib\site-packages)
-WARNING: Ignoring invalid distribution -yarrow (c:\programdata\anaconda3\envs\g_env\lib\site-packages)
-WARNING: Ignoring invalid distribution -umpy (c:\programdata\anaconda3\envs\g_env\lib\site-packages)
-WARNING: Ignoring invalid distribution -rotobuf (c:\programdata\anaconda3\envs\g_env\lib\site-packages)
-WARNING: Ignoring invalid distribution -qdm (c:\programdata\anaconda3\envs\g_env\lib\site-packages)
-WARNING: Ignoring invalid distribution -orch (c:\programdata\anaconda3\envs\g_env\lib\site-packages)
-WARNING: Ignoring invalid distribution -oblib (c:\programdata\anaconda3\envs\g_env\lib\site-packages)
-WARNING: Ignoring invalid distribution -hapely (c:\programdata\anaconda3\envs\g_env\lib\site-packages)
-WARNING: Ignoring invalid distribution -equests (c:\programdata\anaconda3\envs\g_env\lib\site-packages)
-WARNING: Ignoring invalid distribution -enacity (c:\programdata\anaconda3\envs\g_env\lib\site-packages)
-WARNING: Ignoring invalid distribution -andas (c:\programdata\anaconda3\envs\g_env\lib\site-packages)
-WARNING: Ignoring invalid distribution -yarrow (c:\programdata\anaconda3\envs\g_env\lib\site-packages)
-WARNING: Ignoring invalid distribution -umpy (c:\programdata\anaconda3\envs\g_env\lib\site-packages)
-WARNING: Ignoring invalid distribution -rotobuf (c:\programdata\anaconda3\envs\g_env\lib\site-packages)
-WARNING: Ignoring invalid distribution -qdm (c:\programdata\anaconda3\envs\g_env\lib\site-packages)
-WARNING: Ignoring invalid distribution -orch (c:\programdata\anaconda3\envs\g_env\lib\site-packages)
-WARNING: Ignoring invalid distribution -oblib (c:\programdata\anaconda3\envs\g_env\lib\site-packages)
-WARNING: Ignoring invalid distribution -hapely (c:\programdata\anaconda3\envs\g_env\lib\site-packages)
-WARNING: Ignoring invalid distribution -equests (c:\programdata\anaconda3\envs\g_env\lib\site-packages)
-WARNING: Ignoring invalid distribution -enacity (c:\programdata\anaconda3\envs\g_env\lib\site-packages)
-WARNING: Ignoring invalid distribution -andas (c:\programdata\anaconda3\envs\g_env\lib\site-packages)</code></pre>
-</div>
+</section>
+<section id="load-the-libraries-and-the-data" class="level3">
+<h3 class="anchored" data-anchor-id="load-the-libraries-and-the-data">Load the libraries and the data</h3>
+<p>We will use a dataset of residential building characteristics collected and made public by the Washington DC government, called the <a href="https://opendata.dc.gov/datasets/DCGIS::computer-assisted-mass-appraisal-residential/about">Computer Assisted Mass Appraisal (CAMA) database</a>. We also import the <a href="https://github.com/ResidentMario/missingno">missingno package</a> that we installed above.</p>
+<div class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> missingno <span class="im">as</span> msno</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co">#####################</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Load your dataset</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(<span class="st">'dc_tax_data.csv'</span>)</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>df<span class="op">=</span>df[[<span class="st">'SSL'</span>, <span class="st">'BATHRM'</span>,<span class="st">'HEAT_D'</span>, <span class="st">'AC'</span>, <span class="st">'NUM_UNITS'</span>,</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>       <span class="st">'ROOMS'</span>, <span class="st">'BEDRM'</span>, <span class="st">'AYB'</span>, <span class="st">'YR_RMDL'</span>, <span class="st">'STORIES'</span>, <span class="st">'SALEDATE'</span>,</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>       <span class="st">'PRICE'</span>, <span class="st">'QUALIFIED'</span>, <span class="st">'SALE_NUM'</span>, <span class="st">'GBA'</span>, <span class="st">'BLDG_NUM'</span>, <span class="st">'STYLE_D'</span>, <span class="st">'STRUCT_D'</span>, <span class="st">'GRADE_D'</span>,</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>         <span class="st">'CNDTN_D'</span>, <span class="st">'EXTWALL_D'</span>, <span class="st">'ROOF_D'</span>, <span class="st">'INTWALL_D'</span>, <span class="st">'KITCHENS'</span>,</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>       <span class="st">'FIREPLACES'</span>]]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="visualizing-missing-values" class="level2">
@@ -298,14 +227,15 @@ WARNING: Ignoring invalid distribution -andas (c:\programdata\anaconda3\envs\g_e
 <p><code>missingno</code> offers visualizations for two main purposes - reporting missing rows and columns, and checking the relation of missing values among columns. Let’s begin by checking out the first type.</p>
 <section id="matrix" class="level3">
 <h3 class="anchored" data-anchor-id="matrix">1. Matrix</h3>
-<p>The following code helps us visualize the missing values in a matrix</p>
-<div class="cell" data-execution_count="5">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>msno.matrix(df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="5">
+<p>The following code helps us visualize the missing values in a matrix. Note that you can set the figure size and fontsize parameters as you wish:</p>
+<div class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>msno.matrix(df, figsize<span class="op">=</span>(<span class="dv">10</span>,<span class="dv">5</span>), fontsize<span class="op">=</span><span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="4">
 <pre><code>&lt;AxesSubplot:&gt;</code></pre>
+<p><strong>Matrix of missing values</strong></p>
 </div>
 <div class="cell-output cell-output-display">
-<p><img src="msno_tut_files/figure-html/cell-6-output-2.png" width="2014" height="949"></p>
+<p><img src="msno_tut_files/figure-html/cell-5-output-2.png" width="847" height="466"></p>
 </div>
 </div>
 <p>This plot shows us the pattern of missingness across columns. White lines indicate missing values. A quick glance can tell you if there’s a pattern or if the missingness is random. As we see above, the <code>YR_RMDL</code> (year in which building was remodeled) column has the most missing values, followed by the <code>PRICE</code> column.</p>
@@ -314,13 +244,14 @@ WARNING: Ignoring invalid distribution -andas (c:\programdata\anaconda3\envs\g_e
 <section id="barplot." class="level3">
 <h3 class="anchored" data-anchor-id="barplot.">2. Barplot.</h3>
 <p>The Bar chart is a quick-check tool to see how many non-missing values we have per column.</p>
-<div class="cell" data-execution_count="6">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>msno.bar(df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="6">
+<div class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>msno.bar(df, figsize<span class="op">=</span>(<span class="dv">9</span>, <span class="dv">4</span>), fontsize<span class="op">=</span><span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="5">
 <pre><code>&lt;AxesSubplot:&gt;</code></pre>
+<p><strong>Barplot of missing non-missing values</strong></p>
 </div>
 <div class="cell-output cell-output-display">
-<p><img src="msno_tut_files/figure-html/cell-7-output-2.png" width="2013" height="1015"></p>
+<p><img src="msno_tut_files/figure-html/cell-6-output-2.png" width="780" height="439"></p>
 </div>
 </div>
 </section>
@@ -328,54 +259,66 @@ WARNING: Ignoring invalid distribution -andas (c:\programdata\anaconda3\envs\g_e
 <h3 class="anchored" data-anchor-id="heatmap">3. Heatmap</h3>
 <p>The <code>missingno</code> heatmap is a tool for exploring the relationship between missing values in different variables within a dataset. This heatmap focuses on nullity correlation, which essentially tells us how the presence or absence of one variable impacts another. The algorithm behind this heatmap filters out variables that don’t significantly contribute to the analysis. This means variables that are consistently non-null or always null are excluded because they don’t provide useful correlation information.</p>
 <p>Entries marked &lt;1 or &gt;-1 hint at near-perfect negative or positive relationships with a few exceptions. These exceptions are important as they might indicate irregularities or errors in the data.</p>
-<p>The heatmap is a great tool for visualizing and understanding pairwise relationships in terms of data completeness, its utility starts to taper off when dealing with more complex relationships or extremely large datasets. I</p>
-<div class="cell" data-execution_count="7">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>msno.heatmap(df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="7">
+<div class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>df2<span class="op">=</span>df.iloc[:, <span class="dv">2</span>:<span class="dv">28</span>]</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>msno.heatmap(df2, figsize<span class="op">=</span>(<span class="dv">9</span>, <span class="dv">5</span>), fontsize<span class="op">=</span><span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="6">
 <pre><code>&lt;AxesSubplot:&gt;</code></pre>
+<p><strong>Heatmap - Missing value correlations</strong></p>
 </div>
 <div class="cell-output cell-output-display">
-<p><img src="msno_tut_files/figure-html/cell-8-output-2.png" width="1516" height="1009"></p>
+<p><img src="msno_tut_files/figure-html/cell-7-output-2.png" width="746" height="462"></p>
 </div>
 </div>
 </section>
 <section id="dendrogram" class="level3">
 <h3 class="anchored" data-anchor-id="dendrogram">4. Dendrogram</h3>
-<p>The <code>dendrogram</code> in <code>missingno</code> offers a more comprehensive view of variable completion correlations, going beyond the pairwise analysis seen in the correlation heatmap. It employs a hierarchical clustering algorithm from the SciPy library to assess variables against each other based on their nullity correlation. This is done by evaluating binary distance, where the algorithm iteratively groups variables in a way that minimizes the distance within these clusters. A key aspect of this process is that variables with similar patterns of missingness are clustered together.</p>
-<p>When you look at a dendrogram, you’re essentially reading a story of variable correlation from the top down. Points where cluster leaves join at zero indicate a perfect prediction of one variable’s presence by another’s. This could mean scenarios where one variable is always empty when another is filled, or they might consistently mirror each other’s state (both being empty or filled).</p>
+<p>The <code>dendrogram</code> in <code>missingno</code> offers a more comprehensive view of variable completion correlations, going beyond the pairwise analysis seen in the correlation heatmap. It employs a hierarchical clustering algorithm from the SciPy library to assess variables against each other based on their nullity correlation. This is done by evaluating binary distance, where the algorithm iteratively groups variables in a way that minimizes the distance within these clusters. A key aspect of this process is that variables with similar patterns of missingness are clustered together. When you look at a dendrogram, you’re essentially reading a story of variable correlation from the top down. Points where cluster leaves join at zero indicate a perfect prediction of one variable’s presence by another’s. This could mean scenarios where one variable is always empty when another is filled, or they might consistently mirror each other’s state (both being empty or filled).</p>
 <p>For instance, in a specific dataset, the dendrogram might cluster together variables that are mandatory and therefore always present. Leaves that are close but not exactly at zero suggest a strong, albeit not perfect, correlation. Such nuances are crucial for data analysts, as they highlight potential mismatches or anomalies in the dataset. If, according to your understanding of the data, certain columns should match in their presence or absence, the dendrogram can quantify the extent of mismatches. This insight could inform decisions on how many values need to be adjusted to align with expected patterns.</p>
-<div class="cell" data-execution_count="8">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Dendrogram</span></span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>msno.dendrogram(df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="8">
+<div class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Dendrogram</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>msno.dendrogram(df2, figsize<span class="op">=</span>(<span class="dv">9</span>, <span class="dv">5</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="7">
 <pre><code>&lt;AxesSubplot:&gt;</code></pre>
+<p><strong>Dendrogram of missing values</strong></p>
 </div>
 <div class="cell-output cell-output-display">
-<p><img src="msno_tut_files/figure-html/cell-9-output-2.png" width="2001" height="934"></p>
+<p><img src="msno_tut_files/figure-html/cell-8-output-2.png" width="820" height="496"></p>
 </div>
 </div>
 <p>The diagram suggests that “PLACES”, “BEDRM”, “ROOMS”, and “STORIES” have very similar patterns of missingness, hence they are clustered closely together. “AYB” and “YR_RMDL” merge at a higher point than “PLACES”, “BEDRM”, “ROOMS”, and “STORIES”, suggesting that “AYB” and “YR_RMDL” are less similarly missing compared to the other cluster.</p>
 <p>Where clusters join together at the very bottom, it could suggest that the presence or absence of one variable is a good predictor for the presence or absence of the other within the same cluster.</p>
 </section>
+<section id="limitations" class="level3">
+<h3 class="anchored" data-anchor-id="limitations">Limitations:</h3>
+<p>The simplicity of this package is a double-edged sword. There is limited flexibility and customization. Moreover, the official documentation notes that datasets with more than 50 variables are difficult to visualize. Moreover, if you have a large number of variables, visual checks of missingness patterns are probably insufficient, and you should use statistical techniques to check patterns.</p>
+</section>
 </section>
 <section id="conclusion" class="level2">
 <h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
 <p>In machine learning applications, missing values might seem like an irritation to be disposed of quickly. Our ultimate goal is to reach a missingno matrix like this:</p>
-<div class="cell" data-execution_count="9">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>df2 <span class="op">=</span> df.dropna()</span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>msno.matrix(df2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="9">
+<div class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>df2 <span class="op">=</span> df2.dropna()</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>msno.matrix(df2, figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">4</span>), fontsize<span class="op">=</span><span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="8">
 <pre><code>&lt;AxesSubplot:&gt;</code></pre>
+<p><strong>Matrix - no null values</strong></p>
 </div>
 <div class="cell-output cell-output-display">
-<p><img src="msno_tut_files/figure-html/cell-10-output-2.png" width="1997" height="949"></p>
+<p><img src="msno_tut_files/figure-html/cell-9-output-2.png" width="688" height="394"></p>
 </div>
 </div>
 <p><strong>But exercise caution and patience!</strong></p>
-<p>Dropping or imputing missing values willy-nilly without examining the co-occurrence pattern among variables may introduce subtle, damaging biases into the dataset. However, the lean and efficient <code>missingno</code> library will hopefully let you diagnose the missing patterns in seconds!</p>
+<p>Dropping or imputing missing values willy-nilly without examining the co-occurrence pattern among variables may introduce subtle, damaging biases into the dataset. However, the lean and efficient <code>missingno</code> library will hopefully let you diagnose the missing patterns in seconds.</p>
 <p>Happy coding!</p>
+<hr>
+<section id="references" class="level3">
+<h3 class="anchored" data-anchor-id="references">References:</h3>
+<p>https://github.com/ResidentMario/missingno</p>
+<p>https://opendata.dc.gov/datasets/DCGIS::computer-assisted-mass-appraisal-residential/about</p>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->
