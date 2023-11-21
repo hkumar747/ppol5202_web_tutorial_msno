@@ -1,0 +1,38 @@
+quarto website
+
+https://adtarie.net/posts/007-quarto-python-tutorial/
+
+
+
+- bring everything to one git repository (.ipynb + data)
+
+
+
+- Open powershell, navigate to directory
+
+
+- activate conda env
+
+
+
+mkdir posts
+quarto create-project . --type website
+
+
+
+- quarto convert notebook.ipynb
+- quarto render
+
+
+move .qmd to posts, add .qmd in the about.qmd
+
+
+quarto preview
+
+create docs folder
+
+again in quarto_yml, add 'output-dir:docs'
+
+git add .
+git commit -m "my first website"
+git push
