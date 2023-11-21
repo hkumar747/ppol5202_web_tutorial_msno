@@ -4,20 +4,18 @@ jupyter: g_env
 ---
 
 ```{python}
----
-title: "Homework 1, DSAN 6600"
-date: 'Sept. 22, 2023'
-author:
-  - name: Kumar H 
-    corresponding: false
-    email: hk939@georgetown.edu
-format:  
-  html:
-     mathjax: true
-project:
-  type: website
-  output-dir: docs
----
+# title: "Homework 1, DSAN 6600"
+# date: 'Sept. 22, 2023'
+# author:
+#   - name: Kumar H 
+#     corresponding: false
+#     email: hk939@georgetown.edu
+# format:  
+#   html:
+#      mathjax: true
+# project:
+#   type: website
+#   output-dir: docs
 ```
 
 ```{python}
@@ -29,7 +27,7 @@ import os
 
 ```{python}
 
-os.chdir(r'D:\Work\Georgetown\acad\sem3\viz\tutorial_msno')
+os.chdir(r'D:\Work\Georgetown\acad\sem3\viz\ppol5202_web_tutorial_msno')
 # Load your dataset
 df = pd.read_csv('dc_tax_data.csv')
 ```

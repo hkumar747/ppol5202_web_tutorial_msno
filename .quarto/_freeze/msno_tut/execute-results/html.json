@@ -1,0 +1,11 @@
+{
+  "hash": "ca9615dab48c65d6fa47d36348cc9153",
+  "result": {
+    "markdown": "---\ntitle: Visualize matrix of missing values\n---\n\n::: {.cell execution_count=1}\n``` {.python .cell-code}\n# title: \"Homework 1, DSAN 6600\"\n# date: 'Sept. 22, 2023'\n# author:\n#   - name: Kumar H \n#     corresponding: false\n#     email: hk939@georgetown.edu\n# format:  \n#   html:\n#      mathjax: true\n# project:\n#   type: website\n#   output-dir: docs\n```\n:::\n\n\n::: {.cell execution_count=2}\n``` {.python .cell-code}\nimport pandas as pd\nimport numpy as np\nimport missingno as msno\nimport os\n```\n:::\n\n\n::: {.cell execution_count=3}\n``` {.python .cell-code}\nos.chdir(r'D:\\Work\\Georgetown\\acad\\sem3\\viz\\ppol5202_web_tutorial_msno')\n# Load your dataset\ndf = pd.read_csv('dc_tax_data.csv')\n```\n:::\n\n\nThe following code helps us visualize the missing values in a matrix\n\n::: {.cell execution_count=4}\n``` {.python .cell-code}\nmsno.matrix(df)\n```\n\n::: {.cell-output .cell-output-display execution_count=5}\n```\n<AxesSubplot:>\n```\n:::\n\n::: {.cell-output .cell-output-display}\n![](msno_tut_files/figure-html/cell-5-output-2.png){width=2014 height=949}\n:::\n:::\n\n\n",
+    "supporting": [
+      "msno_tut_files\\figure-html"
+    ],
+    "filters": [],
+    "includes": {}
+  }
+}

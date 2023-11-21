@@ -1,0 +1,23 @@
+[
+  {
+    "objectID": "posts/msno_tut.html",
+    "href": "posts/msno_tut.html",
+    "title": "Visualize matrix of missing values",
+    "section": "",
+    "text": "# title: \"Homework 1, DSAN 6600\"\n# date: 'Sept. 22, 2023'\n# author:\n#   - name: Kumar H \n#     corresponding: false\n#     email: hk939@georgetown.edu\n# format:  \n#   html:\n#      mathjax: true\n# project:\n#   type: website\n#   output-dir: docs\n\n\nimport pandas as pd\nimport numpy as np\nimport missingno as msno\nimport os\n\n\nos.chdir(r'D:\\Work\\Georgetown\\acad\\sem3\\viz\\ppol5202_web_tutorial_msno')\n# Load your dataset\ndf = pd.read_csv('dc_tax_data.csv')\n\nThe following code helps us visualize the missing values in a matrix\n\nmsno.matrix(df)\n\n&lt;AxesSubplot:&gt;"
+  },
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "About",
+    "section": "",
+    "text": "About this site"
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "ppol5202_web_tutorial_msno",
+    "section": "",
+    "text": "This is a Quarto website.\nTo learn more about Quarto websites visit https://quarto.org/docs/websites."
+  }
+]
