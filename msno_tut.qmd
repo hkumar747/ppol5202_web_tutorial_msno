@@ -1,0 +1,45 @@
+---
+title: Visualize matrix of missing values
+jupyter: g_env
+---
+
+```{python}
+---
+title: "Homework 1, DSAN 6600"
+date: 'Sept. 22, 2023'
+author:
+  - name: Kumar H 
+    corresponding: false
+    email: hk939@georgetown.edu
+format:  
+  html:
+     mathjax: true
+project:
+  type: website
+  output-dir: docs
+---
+```
+
+```{python}
+import pandas as pd
+import numpy as np
+import missingno as msno
+import os
+```
+
+```{python}
+
+os.chdir(r'D:\Work\Georgetown\acad\sem3\viz\tutorial_msno')
+# Load your dataset
+df = pd.read_csv('dc_tax_data.csv')
+```
+
+
+
+The following code helps us visualize the missing values in a matrix
+
+
+```{python}
+msno.matrix(df)
+```
+
